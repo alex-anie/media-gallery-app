@@ -77,7 +77,7 @@ class MediaController extends Controller
     
     }
 
-    public function show(){
-    //    
+    public function show(Media $media){
+        return Inertia::render('media/Show', ['media' => $media]);
     }
 }

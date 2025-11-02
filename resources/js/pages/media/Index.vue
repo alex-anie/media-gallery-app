@@ -17,7 +17,7 @@
         </div>
      </div>
 
-     <!-- Gallery empty state -->
+    <!-- Gallery empty state -->
     <div v-if="media.length === 0" class="flex-col items-center mt-20 text-gray-500">
         <Trash2 class="w-14 h-14 mb-4" />
         <p class="text-xl font-semibold">Gallery is Empty</p>
@@ -29,28 +29,33 @@
             v-for="item in media"
             :key="item.id"
             :href="`/media/${item.id}`"
-            class="block group p-3 border rounded-xl shadow-sm hover:shadow-md transition duration-300 bg-white"
+            class="block group p-1 border rounded-xl shadow-sm hover:shadow-md transition duration-300"
         >
-            <div class="rounded-lg overflow-hidden w-full h-40 bg-gray-100 flex items-center justify-center">
+            <div class="rounded-lg overflow-hidden w-full h-100 bg-gray-100 flex items-center justify-center">
                 <!-- Image Preview -->
                 <img
                     v-if="item.mime_type.includes('image')" 
                     :src="`/storage/${item.path}`" 
-                    alt=""
+                    :alt="item.name"
                     class="w-full h-full object-cover transition group-hover:scale-105"
                     >
 
                 <!-- Audio Icon -->
-                <Music
+                 <Music
                     v-else-if="item.mime_type.includes('audio')"
                     class="w-12 h-12 text-red-600"
                 />
+                
 
                 <!-- Video Thumbnail -->
-                <Video
-                    v-else-if="item.mime_type.includes('video')"
-                    class="w-12 h-12 text-red-600"
-                />
+                 <div v-else-if="item.mime_type.includes('video')"
+                    class=" text-red-600">
+
+                    <video controls autoplay loop muted playsinline class="h-full w-full rounded-3xl object-cover object-[50%_50%]">
+                        <source :src="`/storage/${item.path}`" :type="item.mime_type" />
+                    </video>
+                </div>
+                
 
                 <!-- PDF / File -->
                 <FileText 
@@ -71,6 +76,16 @@
                 <p v-if="item.duration" class="text-gray-500 text-xs">
                     Duration: {{ item.duration.toFixed(1) }}s
                 </p>
+
+                <!-- Show Icon -->
+                 <Video
+                     v-else-if="item.mime_type.includes('video')"
+                    class="w-12 h-12 text-red-600"
+                />
+
+                <div v-else-if="item.mime_type.includes('audio')">
+                    <audio class="h-8 w-full"  controls :src="`/storage/${item.path}`"></audio>
+                 </div>
             </div>
 
             <!-- Button -->
