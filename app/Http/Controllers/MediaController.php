@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Media;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class MediaController extends Controller
 {
@@ -18,44 +18,60 @@ class MediaController extends Controller
     }
 
     public function store(Request $request){
-            // dd($request->all());
-            $file = $request->file("path");
+    /**
+     * Validate uploaded file
+     * Accept images, audio, video, PDF up to 500MB
+     */
+    $validated = $request->validate([
+        'path' => 'required|mimes:jpeg,png,jpg,gif,svg,mp3,wav,mp4,mov,pdf|max:512000',
+    ]);
 
-            $validated = $request->validate([
-                'path' => 'required|mimes:jpeg,png,jpg,gif,svg,mp3,wav,mp4,mov,pdf|max:20480', // 20MB
-            ]);
+    // Retrieve uploaded file from request
+    $file = $request->file('path');
 
-            $path = $file->store('media', 'public');
+    // Store file in storage/app/public/media
+    $path = $file->store('media', 'public');
 
-            $metadata = [
-                'path' => $path,
-                'name' => $file->getClientOriginalName(),
-                'extension' => $file->getClientOriginalExtension(),
-                'mime_type' => $file->getMimeType(),
-                'file_size' => $file->getSize(),
-            ];
+    // Correct absolute filepath for FFmpeg & getimagesize
+    $filePath = storage_path('app/public/' . $path);
 
-            // If image, extract dimensions
-            if(str_contains($file->getMimeType(), 'image')){
-                [$width, $height] = getimagesize($file);
-                $metadata['width'] = $width;
-                $metadata['heigh'] = $height;
-            }
+    /**
+     * Base metadata to store in DB
+     */
+    $metadata = [
+        'path'       => $path,
+        'name'       => $file->getClientOriginalName(),
+        'extension'  => $file->getClientOriginalExtension(),
+        'mime_type'  => $file->getMimeType(),
+        'file_size'  => $file->getSize(), // bytes
+    ];
 
-            // If audio or video, use FFmpeg for duration + bitrate (if installed)
-            if(str_contains($file->getMimeType(), 'audio') || str_contains($file->getMimeType(), 'video')){
+    /**
+     * Extract image dimensions if it's an image
+     */
+    if (str_contains($file->getMimeType(), 'image')) {
+        [$width, $height] = getimagesize($file);
+        $metadata['width']  = $width;
+        $metadata['height'] = $height;
+    }
 
-                // Check if FFmpeg is installed
-                if(shell_exec('which ffprobe')){
-                    $ffprobe = \FFMpeg\FFProbe::create();
+    /**
+     * Extract audio/video metadata (duration & bitrate)
+     * Only runs if FFMPEG is configured on system
+     */
+    try {
+        $ffprobe = \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::getFFProbe();
 
-                    $filePath = storage_path('app/public/'.$path);
-                    $metadata['duration'] = $ffprobe->format($filePath)->get('duration');
-                    $metadata['bitrate'] = $ffprobe->format($filePath)->get('bit_rate');
-                }
-            }
+        $metadata['duration'] = $ffprobe->format($filePath)->get('duration');
+        $metadata['bitrate']  = $ffprobe->format($filePath)->get('bit_rate');
+    } catch (\Exception $e) {
+        // If FFmpeg fails, still save file without extra metadata
+        $metadata['duration'] = null;
+        $metadata['bitrate']  = null;
+    }
 
-            Media::create( $metadata );
+    // Save record to database
+    Media::create($metadata);
 
         return redirect('/media')->with('success', 'media created Successfully');
     

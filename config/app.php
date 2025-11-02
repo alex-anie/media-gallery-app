@@ -94,6 +94,10 @@ return [
     | are secure. You should do this prior to deploying the application.
     |
     */
+    
+    // config/laravel-ffmpeg.php and set the binary paths
+    'ffmpeg.binaries'  => 'C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe',
+    'ffprobe.binaries' => 'C:\\Program Files\\ffmpeg\\bin\\ffprobe.exe',
 
     'cipher' => 'AES-256-CBC',
 
