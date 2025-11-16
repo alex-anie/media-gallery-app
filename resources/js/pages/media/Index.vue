@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, useForm } from '@inertiajs/vue3';
-import { Trash2, Music, Video, FileText, Image } from 'lucide-vue-next';
+import { Trash2, Music, Video, FileText, Image, SquarePen } from 'lucide-vue-next';
 import { MediaData } from '@/types';
 import NavLayouts from '@/layouts/navbar/NavLayouts.vue';
 
@@ -25,17 +25,22 @@ function deleteMedia(id: number, name: string) {
 <template>
     <NavLayouts>
         <div class="w-[90%] mx-auto py-10 mt-10">
-        <div class="flex justify-between items-center">
+        <div class="">
             <h1 class="text-2xl font-bold mb-6 text-red-600">Media Gallery</h1>
-            <div class=" mt-8">
-                <Link class="text-white flex bg-red-500 py-2 px-4 rounded" href="/media/create">Create Media</Link>
+            <div class="fixed z-20 right-10 bottom-10 mt-8">
+                <Link class="text-white flex items-center gap-x-2 bg-red-500 py-2 px-4 rounded" href="/media/create">
+                    <SquarePen class="size-4" />
+                    <span class="text-[12px]">Create Media</span>
+                </Link>
             </div>
         </div>
 
         <!-- Gallery empty state -->
         <div v-if="media.length === 0" class="flex-col items-center mt-20 text-gray-500">
-            <Trash2 class="w-14 h-14 mb-4" />
-            <p class="text-xl font-semibold">Gallery is Empty</p>
+            <div>
+                <Trash2 class="w-14 h-14 mb-4" />
+                <p class="text-xl font-semibold">Gallery is Empty</p>
+            </div>
         </div>
 
         <!-- Media Grid -->
