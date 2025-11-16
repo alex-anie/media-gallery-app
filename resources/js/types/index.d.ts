@@ -37,7 +37,7 @@ export interface User {
 }
 
 export type MediaFile = {
-    path: File | null;
+    path: File | null | string;
 }
 
 export type MediaData = {

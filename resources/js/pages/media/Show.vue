@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { MediaData } from "@/types";
 import { Link } from "@inertiajs/vue3";
-import { ArrowLeft, Pencil, FileVideo, FileAudio, FileImage, FileText } from "lucide-vue-next";
+import { ArrowLeft, Pencil, FileText } from "lucide-vue-next";
 
 const props = defineProps<{media: MediaData}>();
 
@@ -34,7 +34,7 @@ const fileUrl = `/storage/${media.path}`;
         </div>
 
         <!-- Media Preview Container -->
-        <div class="bg-gray-100 rounded-xl p-4 flex items-center justify-center min-h-[350px] shadow">
+        <div class=" rounded-xl  flex items-center justify-center min-h-[350px]">
 
             <!-- Image -->
             <img
@@ -49,7 +49,7 @@ const fileUrl = `/storage/${media.path}`;
                 v-else-if="media.mime_type.includes('video')"
                 :src="fileUrl"
                 controls
-                class="w-full rounded-lg shadow"
+                class="max-h-96 rounded-lg shadow"
             ></video>
 
             <!-- Audio -->

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Media;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
@@ -13,6 +14,7 @@ class MediaController extends Controller
         $media = Media::orderBy('id', 'desc')->get();
         return Inertia::render("media/Index", ['media' => $media]);
     }
+    
     public function create(){
         return Inertia::render("media/Create");
     }
@@ -79,5 +81,54 @@ class MediaController extends Controller
 
     public function show(Media $media){
         return Inertia::render('media/Show', ['media' => $media]);
+    }
+
+    public function edit(Media $media){
+        return Inertia::render('media/Edit', ['media' => $media]);
+    }
+
+    public function update(Request $request, Media $media){
+    
+        $validated = $request->validate([
+            'path' => 'required|mimes:jpeg,png,jpg,gif,svg,mp3,wav,mp4,mov,pdf|max:512000',
+        ]);
+
+        $file = $request->file('path');
+
+        $path = $file->store('media', 'public');
+
+        $filePath = storage_path('app/public/' . $path);
+
+        $metadata = [
+            'path'       => $path,
+            'name'       => $file->getClientOriginalName(),
+            'extension'  => $file->getClientOriginalExtension(),
+            'mime_type'  => $file->getMimeType(),
+            'file_size'  => $file->getSize(), // bytes
+        ];
+
+        if (str_contains($file->getMimeType(), 'image')) {
+            [$width, $height] = getimagesize($file);
+            $metadata['width']  = $width;
+            $metadata['height'] = $height;
+        }
+
+        try {
+            $ffprobe = \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::getFFProbe();
+
+            $metadata['duration'] = $ffprobe->format($filePath)->get('duration');
+            $metadata['bitrate']  = $ffprobe->format($filePath)->get('bit_rate');
+        } catch (\Exception $e) {
+            $metadata['duration'] = null;
+            $metadata['bitrate']  = null;
+        }
+
+        $media->update($metadata);
+        return redirect('/media')->with('success', 'media created Successfully');
+    }
+
+    public function destroy(Media $media){
+        $media->delete();
+        return redirect('/media')->with('success', 'media deleted successfully');
     }
 }
