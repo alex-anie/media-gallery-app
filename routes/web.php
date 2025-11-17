@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\MediaController;
@@ -23,3 +24,4 @@ Route::delete('/media/{media}', [MediaController::class, 'destroy'])->name('medi
 Route::get('/images', [ImagesController::class, 'index'])->name('images.index');
 Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
 Route::get('/music', [MusicController::class, 'index'])->name('music.index');
+Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');

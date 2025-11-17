@@ -12,7 +12,7 @@ defineProps<{ media: MediaData[] }>();
 <template>
     <NavLayouts>
         <div class="w-[90%] mx-auto py-10 mt-10">
-            <PageTitle pageTitle="Music Gallery" />
+            <PageTitle pageTitle="Document Gallery" />
             <CreatePost />
             <!-- Media Content -->
             <MediaCard :items="media"/>
