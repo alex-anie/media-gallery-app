@@ -3,6 +3,8 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\MusicController;
+use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
 //Home
@@ -17,5 +19,7 @@ Route::get('/media/{media}/edit', [MediaController::class,'edit'])->name('media.
 Route::post('/media/{media}', [MediaController::class,'update'])->name('media.update');
 Route::delete('/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 
-//Images
+//MIME TYPE ROUTES
 Route::get('/images', [ImagesController::class, 'index'])->name('images.index');
+Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
+Route::get('/music', [MusicController::class, 'index'])->name('music.index');
