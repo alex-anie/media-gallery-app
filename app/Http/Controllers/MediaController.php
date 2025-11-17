@@ -122,13 +122,13 @@ class MediaController extends Controller
         }
 
         $media->update($metadata);
-        return redirect()->route('media.index')->with('success', 'media created Successfully');
+        return redirect()->route('media.index')->with('success', 'media updated Successfully');
         
     }
 
     public function destroy(Media $media){
         $media->delete();
-        return redirect()->route('media.index')->with('success', 'media created Successfully');
+        return redirect()->route('media.index')->with('success', 'media deleted Successfully');
 
     }
 }

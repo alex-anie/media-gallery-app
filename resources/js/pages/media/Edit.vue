@@ -98,20 +98,20 @@ const submit = () => {
                 <p class="font-semibold text-gray-700 mb-2">New File Preview:</p>
 
                 <img
-                    v-if="form.file && form.file.type.includes('image')"
+                    v-if="props.media.mime_type.includes('image')"
                     :src="newFilePreview"
                     class="max-h-64 mx-auto rounded-lg"
                 />
 
                 <video
-                    v-else-if="form.file && form.file.type.includes('video')"
+                    v-else-if="props.media.mime_type.includes('video')"
                     :src="newFilePreview"
                     controls
                     class="max-h-96 rounded"
                 ></video>
 
                 <audio
-                    v-else-if="form.file && form.file.type.includes('audio')"
+                    v-else-if="props.media.mime_type.includes('audio')"
                     :src="newFilePreview"
                     controls
                     class="w-full"
