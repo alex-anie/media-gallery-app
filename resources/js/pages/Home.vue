@@ -1,10 +1,10 @@
 <script setup lang="ts">
     import { Link } from '@inertiajs/vue3';
-    import NavLayouts from '@/layouts/navbar/NavLayouts.vue';
+    import PageLayout from '@/layouts/PageLayout.vue';
 </script>
 
 <template>
-    <NavLayouts>
+    <PageLayout>
         <section class="w-screen h-screen flex justify-center items-center bg-[url(/static-img/noice-particle.jpg)] bg-cover bg-center bg-no-repeat">
             <aside class="">
                 <div class="">
@@ -16,5 +16,5 @@
                 </div>
             </aside>
         </section>
-    </NavLayouts>
+    </PageLayout>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-    import Nav from './Nav.vue';
+    import Footer from './footer/Footer.vue';
+    import Nav from './navbar/Nav.vue';
 </script>
 <template>
     <div>
@@ -7,5 +8,8 @@
     </div>
     <div>
         <slot></slot>
+    </div>
+    <div>
+        <Footer />
     </div>
 </template>

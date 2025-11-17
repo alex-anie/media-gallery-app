@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { SquarePen } from 'lucide-vue-next';
+    import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
