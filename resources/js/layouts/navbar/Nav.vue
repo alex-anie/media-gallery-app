@@ -29,6 +29,9 @@
                 <li>
                     <NavLink href="/videos" :active="$page.url === '/videos'">Videos</NavLink>
                 </li>
+                 <li>
+                    <NavLink href="/music" :active="$page.url === '/music'">Music</NavLink>
+                </li>
                 <li>
                     <NavLink href="/documents" :active="$page.url === '/documents'">Documents</NavLink>
                 </li>
