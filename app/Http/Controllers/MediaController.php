@@ -72,11 +72,9 @@ class MediaController extends Controller
         $metadata['bitrate']  = null;
     }
 
-    // Save record to database
-    Media::create($metadata);
-
-        return redirect('/media')->with('success', 'media created Successfully');
-    
+        // Save record to database
+        Media::create($metadata);
+        return redirect()->route('media.index')->with('success', 'media created Successfully');
     }
 
     public function show(Media $media){
@@ -124,11 +122,13 @@ class MediaController extends Controller
         }
 
         $media->update($metadata);
-        return redirect('/media')->with('success', 'media created Successfully');
+        return redirect()->route('media.index')->with('success', 'media created Successfully');
+        
     }
 
     public function destroy(Media $media){
         $media->delete();
-        return redirect('/media')->with('success', 'media deleted successfully');
+        return redirect()->route('media.index')->with('success', 'media created Successfully');
+
     }
 }
