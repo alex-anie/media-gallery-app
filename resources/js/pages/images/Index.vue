@@ -7,7 +7,6 @@ import PageLayout from '@/layouts/PageLayout.vue';
 
 defineProps<{ media: MediaData[] }>();
 
-
 </script>
 
 <template>
@@ -16,7 +15,7 @@ defineProps<{ media: MediaData[] }>();
             <PageTitle pageTitle="Image Gallery" />
             <CreatePost />
             <!-- Media Content -->
-            <MediaCard :items="media"/>
+            <MediaCard :items="media" pageName="Image"/>
         </div>
     </PageLayout>
 </template>

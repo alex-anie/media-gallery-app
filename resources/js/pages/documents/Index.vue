@@ -16,7 +16,7 @@ defineProps<{ media: MediaData[] }>();
             <PageTitle pageTitle="Document Gallery" />
             <CreatePost />
             <!-- Media Content -->
-            <MediaCard :items="media"/>
+            <MediaCard :items="media" pageName="Document"/>
         </div>
     </PageLayout>
 </template>

@@ -60,4 +60,23 @@ export type  DbImages = {
     update_at: string;
 }
 
+export type UserData = {
+    name: string
+    email: string
+    password: string
+    profile_image: string | null 
+}
+
+export type UserDataTyped = {
+    auth: {
+        user: {
+        id: number;
+        name: string;
+        email: string;
+        created_at: string;
+        profile_image: string;
+        } | null;
+    };
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

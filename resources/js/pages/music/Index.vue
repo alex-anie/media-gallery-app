@@ -6,9 +6,6 @@ import { MediaData } from '@/types';
 import PageLayout from '@/layouts/PageLayout.vue';
 
 defineProps<{ media: MediaData[] }>();
-defineOptions({
-    layout: PageLayout
-});
 
 </script>
 
@@ -18,7 +15,7 @@ defineOptions({
             <PageTitle pageTitle="Music Gallery" />
             <CreatePost />
             <!-- Media Content -->
-            <MediaCard :items="media"/>
+            <MediaCard :items="media" pageName="Music"/>
         </div>
     </PageLayout>
 </template>

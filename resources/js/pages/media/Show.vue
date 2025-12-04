@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { MediaData } from "@/types";
-import { Link } from "@inertiajs/vue3";
-import { ArrowLeft, Pencil, FileText } from "lucide-vue-next";
+import GoBackBtn from "@/components/custom/GoBackBtn.vue";
+import { MediaData, UserDataTyped } from "@/types";
+import { Link, usePage } from "@inertiajs/vue3";
+import { Pencil, FileText } from "lucide-vue-next";
 
+
+const page = usePage<UserDataTyped>();
+const user = page.props.auth.user;
 const props = defineProps<{media: MediaData}>();
 
 const media = props.media;
@@ -14,17 +18,14 @@ const fileUrl = `/storage/${media.path}`;
     <div class="p-6 max-w-4xl mx-auto">
 
         <!-- Back button -->
-        <Link href="/media" class="flex items-center gap-2 text-gray-600 hover:text-black mb-6">
-            <ArrowLeft class="w-4 h-4" />
-            Back to Media
-        </Link>
+        <GoBackBtn href="=/media" />
 
         <!-- Title -->
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold">{{ media.name }}</h1>
 
             <!-- Edit / Replace button -->
-            <Link
+            <Link v-if="user"
                 :href="`/media/${media.id}/edit`"
                 class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
             >

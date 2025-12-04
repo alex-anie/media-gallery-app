@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImagesController;
@@ -25,3 +27,13 @@ Route::get('/images', [ImagesController::class, 'index'])->name('images.index');
 Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
 Route::get('/music', [MusicController::class, 'index'])->name('music.index');
 Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+
+//Auth
+Route::get('/login', [UserController::class, 'showLogin'])->name('user.showLogin');
+Route::get('/register', [UserController::class, 'showRegister'])->name('user.showRegistration');
+Route::post('/register', [UserController::class, 'register'])->name('user.register');
+Route::post('/login', [UserController::class, 'login'])->name('user.index');
+
+//Dashboard
+Route::get('/dashboard/all-media-type', [Dashboard::class, 'showAllMediaType'])->name('dashboard.showAllMediaType');
+Route::get('/dashboard/users', [Dashboard::class, 'showUsers'])->name('dashboard.showUsers');

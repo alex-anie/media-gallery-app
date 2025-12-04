@@ -1,7 +1,12 @@
 <script setup lang="ts">
     import { VenetianMask } from 'lucide-vue-next';
     import NavLink from './NavLink.vue';
-    import { Link } from '@inertiajs/vue3';
+    import { Link, usePage } from '@inertiajs/vue3';
+    import { UserDataTyped } from '@/types';
+
+    const page = usePage<UserDataTyped>();
+    const user = page.props.auth.user;
+
 </script>
 <template>
    <nav class="">
@@ -38,12 +43,25 @@
             </ul>
 
             <!-- Login/Logout -->
-            <div class="flex gap-x-4">
+            <div v-if="!user" class="flex gap-x-4">
                 <div>
-                    <Link href="/login" class="text-sm text-red-600 border-[1px] border-red-600 rounded-md py-1 px-2">Log In</Link>
+                    <Link href="/login" class="text-sm text-red-600 border border-red-600 rounded-md py-1 px-2">Log In</Link>
                 </div>
                 <div>
                     <Link href="/register" class="text-sm text-white bg-red-600 py-1 px-2 rounded-md">Register</Link>
+                </div>
+            </div>
+
+             <!-- Login/Logout -->
+            <div v-if="user" class="flex items-center gap-x-4">
+                <div class="flex items-center gap-x-1 border-slate-400 border rounded-xl p-1">
+                    <div class="size-8 rounded-full">
+                        <img class="size-full rounded-full object-cover" :src="`/storage/${user.profile_image}`" alt="">
+                    </div>
+                    <p class="text-[12px]">{{ user.name }}</p>
+                </div>
+                <div>
+                    <Link href="/dashboard/all-media-type" class="text-sm text-white bg-red-600 py-1 px-2 rounded-md">Dashboard</Link>
                 </div>
             </div>
         </div>

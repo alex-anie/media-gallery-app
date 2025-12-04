@@ -14,6 +14,6 @@ class DocumentController extends Controller
     public function index(){
         $docs = Media::where('mime_type', 'LIKE', 'application/%')
                 ->orderBy('id', 'desc')->get();
-        return Inertia::render("video/Index", ['media' => $docs]);
+        return Inertia::render("documents/Index", ['media' => $docs]);
     }
 }

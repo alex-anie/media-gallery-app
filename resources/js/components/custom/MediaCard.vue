@@ -1,10 +1,12 @@
 <script setup lang="ts">
-    import { MediaData } from '@/types';
-    import { Link, useForm } from '@inertiajs/vue3';
+    import { MediaData, UserDataTyped } from '@/types';
+    import { Link, useForm, usePage } from '@inertiajs/vue3';
     import { Trash2, Music, Video, FileText, Image} from 'lucide-vue-next';
+    
+    const page = usePage<UserDataTyped>();
+    const user = page.props.auth.user;
 
-
-   const form = useForm<{
+    const form = useForm<{
     id: number | null,
     name: string
 }>({
@@ -12,7 +14,7 @@
     name: ''
 })
 
-defineProps<{ items: MediaData[] }>();
+defineProps<{ items: MediaData[], pageName: string }>();
 
 function deleteMedia(id: number, name: string) {
     if (confirm(`Are you sure you want to delete ${name}`)) {
@@ -22,11 +24,13 @@ function deleteMedia(id: number, name: string) {
 
 </script>
 <template>
-    <!-- Gallery empty state -->
-        <div v-if="items.length === 0" class="w-screen h-screen justify-center items-center">
-            <div>
-                <Trash2 class="w-14 h-14 mb-4" />
-                <p class="text-xl font-semibold">Gallery is Empty</p>
+        <!-- Gallery empty state -->
+        <div v-if="items.length === 0" class="w-full border bg-slate-50 h-96 flex justify-center items-center">
+            <div class="">
+                <div class="flex justify-center">
+                    <Trash2 class="w-14 h-14 mb-4 text-slate-300" />
+                </div>
+                <p class="text-xl font-semibold text-slate-300">{{ pageName }} is Empty</p>
             </div>
         </div>
 
@@ -37,7 +41,7 @@ function deleteMedia(id: number, name: string) {
                 :class="[`${item.width > item.height ? 'col-span-3' : 'col-span-1'}`]"
                 >
 
-                <div class="absolute z-10 right-3 top-3">
+                <div v-if="user" class="absolute z-10 right-3 top-3">
                     <button @click="deleteMedia(item.id, item.name)"
                         class="cursor-pointer text-white bg-red-600 hover:text-red-600 hover:bg-white rounded p-1">
                         <Trash2 />
@@ -54,15 +58,13 @@ function deleteMedia(id: number, name: string) {
                     <!-- Audio Icon -->
                     <Music v-else-if="item.mime_type.includes('audio')" class="w-12 h-12 text-red-600" />
 
-
                     <!-- Video Thumbnail -->
-                    <div v-else-if="item.mime_type.includes('video')" class=" text-red-600">
+                    <div v-else-if="item.mime_type.includes('video')" class="text-red-600">
                         <video controls autoplay loop muted playsinline
                             class="h-full w-full rounded-3xl object-cover object-[50%_50%]">
                             <source :src="`/storage/${item.path}`" :type="item.mime_type" />
                         </video>
                     </div>
-
 
                     <!-- PDF / File -->
                     <FileText v-else class="w-12 h-12 text-red-600" />
