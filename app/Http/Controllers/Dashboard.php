@@ -22,13 +22,16 @@ class Dashboard extends Controller
                 ->orderBy("id", "desc")
                 ->paginate(5)
                 ->withQueryString()
-                ->through(fn($name)=>[
-                    'id' => $name->id,
-                    'names' => $name-> name,
+                ->through(fn($user)=>[
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'profile_image' => $user->profile_image,
+                    'created_at' => $user->created_at,
                 ]);
 
         return Inertia::render('dashboard/Users', [
-            'names' => $users,
+            'users' => $users,
             'filters' => $request->only(['search']),
         ]);
     }
