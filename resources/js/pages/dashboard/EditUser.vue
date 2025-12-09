@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import { reactive } from "vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 import { Mail, Lock, User, Image as ImageIcon } from "lucide-vue-next";
 
+type User = {
+    id: number;
+    name: string;
+    email: string;
+    created_at: string;
+    profile_image: string;
+}
+
+const props = defineProps<{user: User}>();
+
 const form = useForm({
-  name: "",
-  email: "",
+  name: props.user.name,
+  email: props.user.email,
   password: "",
   profile_image: null as File | null,
 });
-
-const errors = reactive({
-  email: "",
-});
-
-function validateEmail() {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  errors.email = emailRegex.test(form.email)
-    ? ""
-    : "Email format is incorrect.";
-}
 
 function handleFile(event: Event) {
   const files = (event.target as HTMLInputElement).files;
@@ -28,13 +26,10 @@ function handleFile(event: Event) {
   }
 }
 
-function submit() {
-  validateEmail();
-  if (errors.email) return;
-
-  form.post("/register", {
-    forceFormData: true,
-  });
+function submit(){
+    form.post(`/dashboard/users/${props.user.id}`, {
+        forceFormData: true
+    });
 }
 </script>
 
@@ -42,7 +37,7 @@ function submit() {
   <div class="min-h-screen bg-slate-100 flex items-center justify-center px-4">
     <div class="w-full max-w-md bg-white p-8 rounded-xl shadow">
       <h1 class="text-2xl font-bold text-slate-800 mb-6 text-center">
-        Create an Account
+        Update an Account
       </h1>
 
       <!-- Full Name -->
@@ -53,11 +48,10 @@ function submit() {
           <input
             v-model="form.name"
             type="text"
-            placeholder="John Doe"
             class="w-full px-2 py-2 focus:outline-none"
           />
         </div>
-        <p v-if="form.errors.name" class="text-red-600 text-sm mt-1">{{ form.errors.name }}</p>
+         <p v-if="form.errors.name" class="text-red-600 text-sm mt-1">{{ form.errors.name }}</p>
       </label>
 
       <!-- Email -->
@@ -67,13 +61,11 @@ function submit() {
           <Mail class="w-5 h-5 text-slate-500" />
           <input
             v-model="form.email"
-            @input="validateEmail"
             type="email"
-            placeholder="example@mail.com"
             class="w-full px-2 py-2 focus:outline-none"
           />
         </div>
-        <p v-if="errors.email" class="text-red-600 text-sm mt-1">{{ errors.email }}</p>
+        <p v-if="form.errors.email" class="text-red-600 text-sm mt-1">{{ form.errors.email }}</p>
       </label>
 
       <!-- Password -->
@@ -86,7 +78,7 @@ function submit() {
             type="password"
             placeholder="********"
             class="w-full px-2 py-2 focus:outline-none"
-          />
+            />
         </div>
         <p v-if="form.errors.password" class="text-red-600 text-sm mt-1">{{ form.errors.password }}</p>
       </label>
@@ -103,7 +95,6 @@ function submit() {
             class="ml-3"
           />
         </div>
-        <!-- <p v-if="form.errors.profile_image" class="text-red-600 text-sm mt-1">{{ form.errors.profile_image }}</p> -->
       </label>
 
       <!-- Submit -->
@@ -111,16 +102,8 @@ function submit() {
         @click="submit"
         class="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700"
       >
-        Register
+        Update User
       </button>
-
-      <!-- Switch to Login -->
-      <p class="text-center mt-4 text-slate-600">
-        Already have an account?
-        <Link href="/login" class="text-red-600 font-semibold hover:underline">
-          Login
-        </Link>
-      </p>
     </div>
   </div>
 </template>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Media;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
@@ -46,6 +48,7 @@ class MediaController extends Controller
         'extension'  => $file->getClientOriginalExtension(),
         'mime_type'  => $file->getMimeType(),
         'file_size'  => $file->getSize(), // bytes
+        'user_id' => Auth::id(),
     ];
 
     /**
@@ -86,7 +89,11 @@ class MediaController extends Controller
     }
 
     public function update(Request $request, Media $media){
-    
+
+        if(! Gate::allows('update-media', $media)){
+            abort(403);
+        }
+
         $validated = $request->validate([
             'path' => 'required|mimes:jpeg,png,jpg,gif,svg,mp3,wav,mp4,mov,pdf|max:512000',
         ]);
@@ -127,8 +134,12 @@ class MediaController extends Controller
     }
 
     public function destroy(Media $media){
+
+        if(! Gate::allows('delete-media', $media)){
+            abort(403);
+        }
+    
         $media->delete();
         return redirect()->route('media.index')->with('success', 'media deleted Successfully');
-
     }
 }

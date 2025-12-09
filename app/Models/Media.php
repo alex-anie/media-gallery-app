@@ -17,5 +17,10 @@ class Media extends Model
         'height',
         'duration',
         'bitrate',
+        'user_id',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

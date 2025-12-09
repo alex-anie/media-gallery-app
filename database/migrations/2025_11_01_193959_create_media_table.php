@@ -28,6 +28,8 @@ return new class extends Migration
             $table->float('duration')->nullable(); // seconds
             $table->integer('bitrate')->nullable(); // for music/video
 
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+
             $table->timestamps();
         });
     }

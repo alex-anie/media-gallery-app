@@ -19,7 +19,6 @@ class UserController extends Controller
     }
 
     public function register(Request $request){
-        // dd($request);
        $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -59,5 +58,14 @@ class UserController extends Controller
         return back()->withErrors([
             'email' => 'Sorry, incorrect credentials',
         ]);
+    }
+
+    public function logout(Request $request){
+        Auth::logout(); 
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/media');
     }
 }

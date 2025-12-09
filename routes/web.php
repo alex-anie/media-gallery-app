@@ -32,8 +32,12 @@ Route::get('/documents', [DocumentController::class, 'index'])->name('documents.
 Route::get('/login', [UserController::class, 'showLogin'])->name('user.showLogin');
 Route::get('/register', [UserController::class, 'showRegister'])->name('user.showRegistration');
 Route::post('/register', [UserController::class, 'register'])->name('user.register');
-Route::post('/login', [UserController::class, 'login'])->name('user.index');
+Route::post('/login', [UserController::class, 'login'])->name('user.login');
+Route::post('/logout', [UserController::class, 'logout'])->name('user.logout');
 
 //Dashboard
 Route::get('/dashboard/all-media-type', [Dashboard::class, 'showAllMediaType'])->name('dashboard.showAllMediaType');
 Route::get('/dashboard/users', [Dashboard::class, 'showUsers'])->name('dashboard.showUsers');
+Route::get('/dashboard/users/{user}/edit', [Dashboard::class, 'editUser'])->name('dashboard.editUser');
+Route::post('/dashboard/users/{user}', [Dashboard::class, 'updateUser'])->name('dashboard.updateUser');
+Route::delete('/dashboard/users/{user}', [Dashboard::class, 'destroyUser'])->name('dashboard.destroy');

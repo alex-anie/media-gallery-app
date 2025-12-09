@@ -18,14 +18,14 @@ const fileUrl = `/storage/${media.path}`;
     <div class="p-6 max-w-4xl mx-auto">
 
         <!-- Back button -->
-        <GoBackBtn href="=/media" />
+        <GoBackBtn href="/media" />
 
         <!-- Title -->
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold">{{ media.name }}</h1>
 
             <!-- Edit / Replace button -->
-            <Link v-if="user"
+            <Link v-if="user && user.id === media.user_id"
                 :href="`/media/${media.id}/edit`"
                 class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
             >

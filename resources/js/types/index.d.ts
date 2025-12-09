@@ -50,7 +50,8 @@ export type MediaData = {
     width: integer | null, 
     height: integer | null,
     duration: float | null,
-    bitrate: integer | null
+    bitrate: integer | null,
+    user_id: number | null,
 }
 
 export type  DbImages = {

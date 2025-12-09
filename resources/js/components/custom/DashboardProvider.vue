@@ -15,13 +15,24 @@ import {
     SidebarRail,
     SidebarTrigger,
 } from '@/components/ui/sidebar'
-import { VenetianMask, Clapperboard, User } from 'lucide-vue-next';
-import { Link } from '@inertiajs/vue3';
+import { VenetianMask, Clapperboard, User, LogOut } from 'lucide-vue-next';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
 import GoBackBtn from '@/components/custom/GoBackBtn.vue';
+import { UserDataTyped } from '@/types';
 
-defineProps<{
-    pageName: string
+const page = usePage<UserDataTyped>();
+const user = page.props.auth.user;
+
+const props = defineProps<{
+    pageName: string,
 }>();
+
+
+const form = useForm({});
+
+function logoutUser(){
+    form.post('/logout')
+}
 
 </script>
 
@@ -65,6 +76,13 @@ defineProps<{
                         <span>Users</span>
                     </Link>
                 </SidebarMenuButton>
+
+                <SidebarMenuButton v-if="user" as-child class="hover:bg-red-600 text-slate-900">
+                    <button @click="logoutUser">
+                        <LogOut />
+                        <span>Logout</span>
+                    </button>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
@@ -81,7 +99,7 @@ defineProps<{
             <div class="fixed bottom-5 right-8">
                 <GoBackBtn href="/media" />
             </div>
-            <p><span class="text-slate-500">Dashboard |</span><span> {{ pageName }}</span></p>
+            <p><span class="text-slate-500">Dashboard |</span><span> {{ props.pageName }}</span></p>
         </div>
     </header>
 

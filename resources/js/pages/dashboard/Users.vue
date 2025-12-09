@@ -2,7 +2,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -11,7 +10,7 @@ import {
 import { Input } from '@/components/ui/input'
 import profileIcon from './../../../../public/static-img/profile_icon.jpg'
 import { ref, watch } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, useForm } from '@inertiajs/vue3';
 import DashboardProvider from '@/components/custom/DashboardProvider.vue';
 
 type User = {
@@ -32,6 +31,14 @@ const props = defineProps<{
     }
 }>();
 
+const form = useForm<{
+  id: number | null,
+  name: string
+}>({
+  id: null,
+  name: ""
+});
+
 const search = ref(props.users.filters?.search || '');
 
 watch(search, (value)=>{
@@ -42,6 +49,13 @@ watch(search, (value)=>{
     }
   )
 })
+
+
+function deleteUser(id: number, name: string) {
+    if (confirm(`Are you sure you want to delete ${name}`)) {
+        form.delete(`/dashboard/users/${id}`);
+    }
+}
 
 </script>
 
@@ -55,7 +69,6 @@ watch(search, (value)=>{
     </div>
 
     <Table>
-    <TableCaption>A list of your recent invoices.</TableCaption>
     <TableHeader>
       <TableRow>
         <TableHead class="w-5">
@@ -91,17 +104,18 @@ watch(search, (value)=>{
         <TableCell>{{ user.created_at }}</TableCell>
         <TableCell  class="flex justify-end gap-x-2">
             <div>
-                <Link class="text-blue-600">Edit</Link>
+                <Link :href="`/dashboard/users/${user.id}/edit`" class="text-blue-600">Edit</Link>
             </div>
             <div>
-                <Link class="text-red-600">Delete</Link>
+                <button @click="deleteUser(user.id, user.name)" class="text-red-600">Delete</button>
             </div>
         </TableCell>
       </TableRow>
     </TableBody>
   </Table>
 
-   <Link 
+  <div class="my-4">
+    <Link 
           v-for="link in props.users.links"
           :key="link.label"
           :link="link.label"
@@ -113,6 +127,7 @@ watch(search, (value)=>{
             'text-slate-500 cursor-not-allowed' : !link.url
           }"
         />
+  </div>
   </div>
 
  

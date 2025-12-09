@@ -41,7 +41,7 @@ function deleteMedia(id: number, name: string) {
                 :class="[`${item.width > item.height ? 'col-span-3' : 'col-span-1'}`]"
                 >
 
-                <div v-if="user" class="absolute z-10 right-3 top-3">
+                <div v-if="user && user.id === item.user_id" class="absolute z-10 right-3 top-3">
                     <button @click="deleteMedia(item.id, item.name)"
                         class="cursor-pointer text-white bg-red-600 hover:text-red-600 hover:bg-white rounded p-1">
                         <Trash2 />
